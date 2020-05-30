@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import tensorflow.compat.v1 as tensorflow
+tensorflow.disable_v2_behavior()
 
+tf.config.experimental.set_visible_devices([], 'GPU')
 
-import tensorflow as tf
+#gpus = tensorflow.config.experimental.list_physical_devices('GPU')
+#for gpu in gpus:
+#  tensorflow.config.experimental.set_memory_growth(gpu, True)
+
+#import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np 
@@ -22,8 +29,6 @@ from tensorflow.keras.callbacks import TensorBoard
 NAME ="Excel model-{}".format(int(time.time()))
 
 tensorboard=TensorBoard(log_dir='logs/{}'.format(NAME))
-    
-                               
 
 df =pd.read_csv('../data/training.csv')
 
@@ -35,12 +40,14 @@ df_droped['Label'] = df_droped['Label'].apply({'s':1, 'b':0}.get)
 X_train, X_test, y_train, y_test = train_test_split(df_droped.drop(['Label'], axis=1), df_droped['Label'], test_size=0.2)
 y_train = y_train.to_numpy()
 y_test = y_test.to_numpy()
-
+X_train = X_train.to_numpy()
+X_test = X_test.to_numpy()
 
 scaler = StandardScaler().fit(X_train)
 X_train = scaler.transform(X_train)
 X_test = scaler.transform(X_test)
-
+print(y_train.shape , X_train.shape)
+print(y_test.shape , X_test.shape)
 
 
 
@@ -72,17 +79,16 @@ model.add(Activation('relu'))
 #model.add(Dense(500))
 #model.add(Activation("relu"))
 
-#model.add(Dense(100))
-#model.add(Activation("relu"))
+'''          
+model.add(Dense(100))
+model.add(Activation("relu"))
           
           
 #model.add(Dense(10))
 #model.add(Activation('relu'))          
-'''          
 
 # Add an output layer 
-model.add(Dense(2))
-model.add(Activation('sigmoid'))
+model.add(Dense(2,activation='sigmoid'))
 
 # define Parameters for the training of the model
 # Good default optimizer to start with , how will we calculate our "error." Neural network aims to minimize loss.
@@ -90,13 +96,10 @@ model.add(Activation('sigmoid'))
 
 model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['accuracy'])
 
-print(X_train.shape)
+model.fit(X_train,y_train)
 
 
-
-model.fit(X_train,y_train, epochs=10 ,batch_size=32)
-
-
+'''
 
           
           
@@ -118,11 +121,7 @@ specificity=cm[1,1]/(cm[1,0]+cm[1,1])
 print("sesnsetivity =",sensitivity)
 print( "specificity =",specificity)
 
-
-    
-
-
-# In[ ]:
+'''
 
 
 
