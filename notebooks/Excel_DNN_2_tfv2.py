@@ -24,7 +24,7 @@ import keras.backend.tensorflow_backend as tfback
 
 def _get_available_gpus():
     """Get a list of available gpu devices (formatted as strings).
-
+    # Source of this function: https://github.com/keras-team/keras/issues/13684
     # Returns
         A list of available GPU devices.
     """
